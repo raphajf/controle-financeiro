@@ -1,4 +1,5 @@
 const database = require('../models');
+const IncomeService = require('../services/IncomeService.js');
 
 class IncomeController {
     static async createIncome (req, res) {
@@ -12,9 +13,35 @@ class IncomeController {
     }
 
     static async listIncomes (req, res) {
+        const description = req.query.descricao;
+        let incomes;
         try {
-            const income = await database.Incomes.findAll({ attributes: ['id', 'description', 'value', ['createdAt', 'date']]});
-            res.status(200).send(income);
+            if (!description) {
+                incomes = await database.Incomes.findAll({ attributes: ['id', 'description', 'value', ['createdAt', 'date']]});
+            } else {
+                incomes = await IncomeService.listIncomesByDescription(description);
+            }
+
+            res.status(200).send(incomes);
+        } catch (err) {
+            res.status(500).send(err.message);
+        }
+    }
+
+    static async listIncomesByMonth (req, res) {
+        const {year, month} = req.params;
+        let incomes;
+        try {
+            if(parseInt(month) > 12 || parseInt(month) < 1 || year.length !== 4) {
+                throw new Error('Incorrect Date');
+            }
+
+            incomes = await IncomeService.listIncomesByMonth(month, year);
+            if(incomes.length == 0) {
+                res.status(200).json({ message: `Não foram encontrados registros para o mes ${month} do ano de ${year}`})
+            }
+
+            res.status(200).send(incomes);
         } catch (err) {
             res.status(500).send(err.message);
         }

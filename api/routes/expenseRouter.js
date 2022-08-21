@@ -9,4 +9,6 @@ expenseRouter.get('/despesas/:id', ExpenseController.listExpenseById);
 expenseRouter.put('/despesas/:id', ExpenseController.updateExpense);
 expenseRouter.delete('/despesas/:id', ExpenseController.deleteExpense);
 
+expenseRouter.get('/despesas/:month/:year', ExpenseController.listExpensesByMonth);
+
 module.exports = expenseRouter;

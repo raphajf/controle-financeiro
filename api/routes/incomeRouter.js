@@ -9,4 +9,6 @@ incomeRouter.get('/receitas/:id', IncomeController.listIncomeById);
 incomeRouter.put('/receitas/:id', IncomeController.updateIncome);
 incomeRouter.delete('/receitas/:id', IncomeController.deleteIncome);
 
+incomeRouter.get('/receitas/:month/:year', IncomeController.listIncomesByMonth);
+
 module.exports = incomeRouter;

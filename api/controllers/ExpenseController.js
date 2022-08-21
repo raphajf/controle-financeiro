@@ -1,20 +1,31 @@
 const database = require('../models');
+const ExpenseService = require('../services/ExpenseService.js');
 
 class ExpenseController {
     static async createExpense (req, res) {
+        let expense = req.body;
         try {
-            let expense = req.body;
-            expense = await database.Expenses.create(expense);
-            res.status(200).send(expense);
+            expense = await ExpenseService.createExpense(expense)
+            res.status(200).json(expense);
         } catch (err) {
-            res.status(500).send(err.message);
+            if (err.message === 'Incorrect Type') {
+                res.status(400).json({ message: err.message });
+            } else {
+                res.status(500).json({ message: err.message });
+            }
         }
     }
 
     static async listExpenses (req, res) {
+        const description = req.query.descricao;
+        let expenses;
         try {
-            const expense = await database.Expenses.findAll({ attributes: ['id', 'description', 'value', ['createdAt', 'date']]});
-            res.status(200).send(expense);
+            if(!description) {
+                expenses = await database.Expenses.findAll({ attributes: ['id', 'description', 'value', ['createdAt', 'date']]});
+            } else {
+                expenses = await ExpenseService.listExpensesByDescription(description);
+            }
+            res.status(200).send(expenses);
         } catch (err) {
             res.status(500).send(err.message);
         }
@@ -25,6 +36,25 @@ class ExpenseController {
             const expenseId = req.params.id
             const expense = await database.Expenses.findByPk(expenseId, {attributes: ['id', 'description', 'value', ['createdAt', 'date']]});
             res.status(200).send(expense);
+        } catch (err) {
+            res.status(500).send(err.message);
+        }
+    }
+
+    static async listExpensesByMonth (req, res) {
+        const {year, month} = req.params;
+        let expenses;
+        try {
+            if(parseInt(month) > 12 || parseInt(month) < 1 || year.length !== 4) {
+                throw new Error('Incorrect Date');
+            }
+
+            expenses = await ExpenseService.listExpensesByMonth(month, year);
+            if(expenses.length == 0) {
+                res.status(200).json({ message: `Não foram encontrados registros para o mes ${month} do ano de ${year}`})
+            }
+
+            res.status(200).send(expenses);
         } catch (err) {
             res.status(500).send(err.message);
         }
