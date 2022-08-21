@@ -72,6 +72,31 @@ class ExpenseService {
         }
     }
 
+    static async listReviewByType (month, year) {
+        try {
+            const expenses = await this.listExpensesByMonth(month, year);
+            let sumByType = []; 
+            expenses.forEach(obj => {
+                let index = sumByType.indexOf(obj.type);
+
+                if (sumByType.length === 0) {
+                    sumByType.push(obj.type);
+                    sumByType.push(obj.value);
+                } else {
+                    if(index != -1) {
+                        sumByType[index + 1] += obj.value;
+                    } else {
+                        sumByType.push(obj.type);
+                        sumByType.push(obj.value);
+                    }
+                }
+            })
+            return sumByType;
+        } catch (err) {
+            throw err;
+        }
+    }
+
     static #sumExpenses (expenses) {
         let soma = 0;
         expenses.forEach(obj => {

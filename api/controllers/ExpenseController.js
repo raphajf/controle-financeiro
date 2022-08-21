@@ -21,7 +21,7 @@ class ExpenseController {
         let expenses;
         try {
             if(!description) {
-                expenses = await database.Expenses.findAll({ attributes: ['id', 'description', 'value', ['createdAt', 'date']]});
+                expenses = await database.Expenses.findAll({ attributes: ['id', 'description', 'value', 'type', ['createdAt', 'date']]});
             } else {
                 expenses = await ExpenseService.listExpensesByDescription(description);
             }
