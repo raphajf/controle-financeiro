@@ -37,21 +37,21 @@ class IncomeService {
     static async listReview (month, year) {
         try {
             const incomes = await this.listIncomesByMonth(month, year);
-            const soma = this.#sumIncomes(incomes);
-            return soma;
+            const sum = this.#sumIncomes(incomes);
+            return sum;
         } catch (err) {
             throw err;
         }
     }
 
     static #sumIncomes (incomes) {
-        let soma = 0;
+        let sum = 0;
         incomes.forEach(obj => {
             let value = obj.value;
-            soma += value
+            sum += value
         });
 
-        return soma;
+        return sum;
     }
 }
 

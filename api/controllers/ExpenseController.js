@@ -6,12 +6,21 @@ class ExpenseController {
         let expense = req.body;
         try {
             expense = await ExpenseService.createExpense(expense)
-            res.status(200).json(expense);
+
+            let date = expense.createdAt;
+            let day = date.getDate();
+            let month = date.getMonth() + 1;
+            let year = date.getFullYear();
+
+            date = `${day}/${month}/${year}`;
+            expense = { id: expense.id, description: expense.description, type: expense.type, value: expense.value, date };
+
+            res.status(200).json({ success: true, message: 'ok', expense });
         } catch (err) {
             if (err.message === 'Incorrect Type') {
-                res.status(400).json({ message: err.message });
+                res.status(400).json({ success: false, message: err.message });
             } else {
-                res.status(500).json({ message: err.message });
+                res.status(500).json({ success: false, message: err.message });
             }
         }
     }
@@ -25,9 +34,9 @@ class ExpenseController {
             } else {
                 expenses = await ExpenseService.listExpensesByDescription(description);
             }
-            res.status(200).send(expenses);
+            res.status(200).json({ success: true, message: 'ok', expenses });
         } catch (err) {
-            res.status(500).send(err.message);
+            res.status(500).json({ success: false, message: err.message });
         }
     }
 
@@ -35,9 +44,9 @@ class ExpenseController {
         try {
             const expenseId = req.params.id
             const expense = await database.Expenses.findByPk(expenseId, {attributes: ['id', 'description', 'value', ['createdAt', 'date']]});
-            res.status(200).send(expense);
+            res.status(200).json({ success: true, message: 'ok', expenses });
         } catch (err) {
-            res.status(500).send(err.message);
+            res.status(500).json({ success: false, message: err.message });
         }
     }
 
@@ -51,12 +60,12 @@ class ExpenseController {
 
             expenses = await ExpenseService.listExpensesByMonth(month, year);
             if(expenses.length == 0) {
-                res.status(200).json({ message: `Não foram encontrados registros para o mes ${month} do ano de ${year}`})
+                res.status(200).json({ success: false, message: `Não foram encontrados registros para o mes ${month} do ano de ${year}`})
             }
 
-            res.status(200).send(expenses);
+            res.status(200).json({ success: true, message: 'ok', expenses });
         } catch (err) {
-            res.status(500).send(err.message);
+            res.status(500).json({ success: false, message: err.message });
         }
     }
     
@@ -68,9 +77,9 @@ class ExpenseController {
                 id
             }});
             expense = await database.Expenses.findByPk(id)
-            res.status(200).send(expense);
+            res.status(200).send({ success: true, message: 'ok', expense });
         } catch (err) {
-            res.status(500).send(err.message);
+            res.status(500).json({ success: false, message: err.message });
         }
     }
 
@@ -80,9 +89,9 @@ class ExpenseController {
             await database.Expenses.destroy({where: {
                 id
             }});
-            res.status(200).send({success: true});
+            res.status(200).send({ success: true, message: 'ok' });
         } catch (err) {
-            res.status(500).send(err.message);
+            res.status(500).send({ success: false, message: err.message });
         }
     }
 }

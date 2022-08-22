@@ -5,10 +5,19 @@ class IncomeController {
     static async createIncome (req, res) {
         try {
             let income = req.body;
+            
             income = await database.Incomes.create(income);
-            res.status(200).send(income);
+            let date = income.createdAt;
+            let day = date.getDate();
+            let month = date.getMonth() + 1;
+            let year = date.getFullYear();
+
+            date = `${day}/${month}/${year}`;
+            income = { id: income.id, description: income.description, value: income.value, date };
+
+            res.status(200).json({ success: true, message: 'ok', income });
         } catch (err) {
-            res.status(500).send(err.message);
+            res.status(500).json({ success: false, message: err.message });
         }
     }
 
@@ -22,9 +31,9 @@ class IncomeController {
                 incomes = await IncomeService.listIncomesByDescription(description);
             }
 
-            res.status(200).send(incomes);
+            res.status(200).json({ success: true, message: 'ok', incomes });
         } catch (err) {
-            res.status(500).send(err.message);
+            res.status(500).json({ success: false, message: err.message });
         }
     }
 
@@ -41,9 +50,9 @@ class IncomeController {
                 res.status(200).json({ message: `Não foram encontrados registros para o mes ${month} do ano de ${year}`})
             }
 
-            res.status(200).send(incomes);
+            res.status(200).json({ success: true, message: 'ok', incomes });
         } catch (err) {
-            res.status(500).send(err.message);
+            res.status(500).json({ success: false, message: err.message });
         }
     }
 
@@ -51,9 +60,9 @@ class IncomeController {
         try {
             const incomeId = req.params.id
             const income = await database.Incomes.findByPk(incomeId, {attributes: ['id', 'description', 'value', ['createdAt', 'date']]});
-            res.status(200).send(income);
+            res.status(200).json({ success: true, message: 'ok', income });
         } catch (err) {
-            res.status(500).send(err.message);
+            res.status(500).json({ success: false, message: err.message });
         }
     }
     
@@ -65,9 +74,9 @@ class IncomeController {
                 id
             }});
             income = await database.Incomes.findByPk(id)
-            res.status(200).send(income);
+            res.status(200).send({ success: true, message: 'ok', income });
         } catch (err) {
-            res.status(500).send(err.message);
+            res.status(500).send({ success: false, message: err.message });
         }
     }
 
@@ -77,9 +86,9 @@ class IncomeController {
             await database.Incomes.destroy({where: {
                 id
             }});
-            res.status(200).send({success: true});
+            res.status(200).send({ success: true, message: 'ok' });
         } catch (err) {
-            res.status(500).send(err.message);
+            res.status(500).send({ success: false, message: err.message });
         }
     }
 }

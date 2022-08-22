@@ -65,8 +65,8 @@ class ExpenseService {
     static async listReview (month, year) {
         try {
             const expenses = await this.listExpensesByMonth(month, year);
-            const soma = this.#sumExpenses(expenses);
-            return soma;
+            const sum = this.#sumExpenses(expenses);
+            return sum;
         } catch (err) {
             throw err;
         }
@@ -98,13 +98,13 @@ class ExpenseService {
     }
 
     static #sumExpenses (expenses) {
-        let soma = 0;
+        let sum = 0;
         expenses.forEach(obj => {
             let value = obj.value;
-            soma += value
+            sum += value
         });
 
-        return soma;
+        return sum;
     }
 }
 
