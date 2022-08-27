@@ -43,8 +43,8 @@ class ExpenseController {
     static async listExpenseById (req, res) {
         try {
             const expenseId = req.params.id
-            const expense = await database.Expenses.findByPk(expenseId, {attributes: ['id', 'description', 'value', ['createdAt', 'date']]});
-            res.status(200).json({ success: true, message: 'ok', expenses });
+            const expense = await database.Expenses.findByPk(expenseId, {attributes: ['id', 'description', 'value', ['createdAt', 'date'], 'type']});
+            res.status(200).json({ success: true, message: 'ok', expense });
         } catch (err) {
             res.status(500).json({ success: false, message: err.message });
         }
@@ -76,7 +76,7 @@ class ExpenseController {
             await database.Expenses.update(expense, {where: {
                 id
             }});
-            expense = await database.Expenses.findByPk(id)
+            expense = await database.Expenses.findByPk(id, { attributes: ['id', 'description', 'value', 'type', ['createdAt', 'date']]})
             res.status(200).send({ success: true, message: 'ok', expense });
         } catch (err) {
             res.status(500).json({ success: false, message: err.message });

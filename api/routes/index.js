@@ -8,6 +8,7 @@ module.exports = app => {
     app.use(incomeRouter);
     app.use(expenseRouter);
     app.use(reviewRouter);
+    app.use(bodyParser.urlencoded({ extended: true /**or false */ }));
     app.get('/', (req, res, next) => {
         res.status(200).send({success: true});
     });
