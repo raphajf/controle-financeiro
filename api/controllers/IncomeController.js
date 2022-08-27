@@ -52,7 +52,11 @@ class IncomeController {
 
             res.status(200).json({ success: true, message: 'ok', incomes });
         } catch (err) {
-            res.status(500).json({ success: false, message: err.message });
+            if(err.message === 'Incorrect Date') {
+                res.status(400).json({ success: false, message: err.message });
+            } else {
+                res.status(500).json({ success: false, message: err.message });
+            }
         }
     }
 
@@ -73,7 +77,7 @@ class IncomeController {
             await database.Incomes.update(income, {where: {
                 id
             }});
-            income = await database.Incomes.findByPk(id)
+            income = await database.Incomes.findByPk(id, { attributes: ['id', 'description', 'value', ['createdAt', 'date']]})
             res.status(200).send({ success: true, message: 'ok', income });
         } catch (err) {
             res.status(500).send({ success: false, message: err.message });

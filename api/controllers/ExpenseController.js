@@ -34,6 +34,7 @@ class ExpenseController {
             } else {
                 expenses = await ExpenseService.listExpensesByDescription(description);
             }
+            
             res.status(200).json({ success: true, message: 'ok', expenses });
         } catch (err) {
             res.status(500).json({ success: false, message: err.message });
@@ -59,15 +60,19 @@ class ExpenseController {
             }
 
             expenses = await ExpenseService.listExpensesByMonth(month, year);
+
             if(expenses.length == 0) {
-                res.status(200).json({ success: false, message: `Não foram encontrados registros para o mes ${month} do ano de ${year}`})
+                res.status(200).send({ success: true, message: `Não foram encontrados registros para o mes ${month} do ano de ${year}`})
             }
 
             res.status(200).json({ success: true, message: 'ok', expenses });
         } catch (err) {
-            res.status(500).json({ success: false, message: err.message });
-        }
-    }
+            if (err.message === 'Incorrect Date') {
+                res.status(400).send({ success: false, message: err.message });
+            } else if (err.message !== 'Incorrect Date') {
+                res.status(500).send({ success: false, message: err.message });
+            }
+        }}
     
     static async updateExpense (req, res) {
         try {

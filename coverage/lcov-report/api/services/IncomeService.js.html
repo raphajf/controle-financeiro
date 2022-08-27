@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">22.41% </span>
+                <span class="strong">51.72% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>13/58</span>
+                <span class='fraction'>30/58</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>2/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">25% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>1/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">22.41% </span>
+                <span class="strong">51.72% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>13/58</span>
+                <span class='fraction'>30/58</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -137,25 +137,25 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -194,26 +194,26 @@ class IncomeService {
 <span class="cstat-no" title="statement not covered" >        }</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 &nbsp;
-    static async listIncomesByMonth<span class="fstat-no" title="function not covered" >(month, year) {</span>
-<span class="cstat-no" title="statement not covered" >        try {</span>
-<span class="cstat-no" title="statement not covered" >            let incomes = await database.Incomes.findAll({ attributes: ['description', 'value', ['createdAt', 'date']]});</span>
-<span class="cstat-no" title="statement not covered" >            let result = [];</span>
-<span class="cstat-no" title="statement not covered" >            incomes.forEach(obj =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >                let date = obj.dataValues.date;</span>
-<span class="cstat-no" title="statement not covered" >                let monthIncome = date.getMonth() + 1;</span>
-<span class="cstat-no" title="statement not covered" >                let yearIncome = date.getFullYear();</span>
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >                if(monthIncome === parseInt(month) &amp;&amp; yearIncome === parseInt(year)) {</span>
-<span class="cstat-no" title="statement not covered" >                    result.push(obj.dataValues);</span>
-<span class="cstat-no" title="statement not covered" >                }</span>
-<span class="cstat-no" title="statement not covered" >            });</span>
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >            return result;</span>
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >        } catch (err) {</span>
+    static async listIncomesByMonth(month, year) {
+        try {
+            let incomes = await database.Incomes.findAll({ attributes: ['description', 'value', ['createdAt', 'date']]});
+            let result = [];
+            incomes.forEach(obj =&gt; {
+                let date = obj.dataValues.date;
+                let monthIncome = date.getMonth() + 1;
+                let yearIncome = date.getFullYear();
+&nbsp;
+                if(monthIncome === parseInt(month) &amp;&amp; yearIncome === parseInt(year)) {
+                    result.push(obj.dataValues);
+                }
+            });
+&nbsp;
+            return result;
+&nbsp;
+        } <span class="branch-0 cbranch-no" title="branch not covered" >catch (err) {</span>
 <span class="cstat-no" title="statement not covered" >            throw err;</span>
 <span class="cstat-no" title="statement not covered" >        } </span>
-<span class="cstat-no" title="statement not covered" >    }</span>
+    }
 &nbsp;
     static async listReview<span class="fstat-no" title="function not covered" > (month, year) {</span>
 <span class="cstat-no" title="statement not covered" >        try {</span>
@@ -244,7 +244,7 @@ module.exports = IncomeService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-08-27T02:09:38.903Z
+                at 2022-08-27T19:07:43.887Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
