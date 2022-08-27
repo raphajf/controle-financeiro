@@ -18,10 +18,11 @@ module.exports = {
     "operatorsAliases": 0
   },
   "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "username": process.env.DB_PROD_USER,
+    "password": process.env.DB_PROD_PASS,
+    "database": process.env.DB_PROD_NAME,
+    "host": process.env.DB_PROD_HOST,
+    "dialect": "mysql",
+    "operatorsAliases": 0
   }
 }
