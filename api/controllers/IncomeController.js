@@ -1,12 +1,16 @@
 const database = require('../models');
 const IncomeService = require('../services/IncomeService.js');
+const jwt = require('jsonwebtoken');
 
 class IncomeController {
     static async createIncome (req, res) {
         try {
-            let income = req.body;
+            let { description, value } = req.body;
+
+            const id = IncomeController.idByToken(req);
             
-            income = await database.Incomes.create(income);
+            let income = await database.Incomes.create({ description, value, cliente_id: id});
+            
             let date = income.createdAt;
             let day = date.getDate();
             let month = date.getMonth() + 1;
@@ -24,9 +28,11 @@ class IncomeController {
     static async listIncomes (req, res) {
         const description = req.query.descricao;
         let incomes;
+        const id = IncomeController.idByToken(req);
         try {
             if (!description) {
-                incomes = await database.Incomes.findAll({ attributes: ['id', 'description', 'value', ['createdAt', 'date']]});
+                incomes = await database.Incomes.findAll({ attributes: ['id', 'description', 'value', ['createdAt', 'date']],
+            where: {cliente_id: id}});
             } else {
                 incomes = await IncomeService.listIncomesByDescription(description);
             }
@@ -63,7 +69,9 @@ class IncomeController {
     static async listIncomeById (req, res) {
         try {
             const incomeId = req.params.id
-            const income = await database.Incomes.findByPk(incomeId, {attributes: ['id', 'description', 'value', ['createdAt', 'date']]});
+            const id = IncomeController.idByToken(req);
+            const income = await database.Incomes.findByPk(incomeId, {attributes: ['id', 'description', 'value', ['createdAt', 'date']],
+        where: { cliente_id: id}});
             res.status(200).json({ success: true, message: 'ok', income });
         } catch (err) {
             res.status(500).json({ success: false, message: err.message });
@@ -94,6 +102,13 @@ class IncomeController {
         } catch (err) {
             res.status(500).send({ success: false, message: err.message });
         }
+    }
+    
+    static idByToken (requisition) {
+        const authHeader = requisition.headers['authorization'];
+        const token = authHeader.split(' ')[1];
+        const { id } = jwt.decode(token)
+        return id;
     }
 }
 

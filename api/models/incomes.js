@@ -2,15 +2,11 @@
 const {
   Model
 } = require('sequelize');
+const Clientes = require('./clientes.js');
 module.exports = (sequelize, DataTypes) => {
   class Incomes extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
+      this.belongsTo(models.Clientes);
     }
   }
   Incomes.init({
@@ -18,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     value: DataTypes.FLOAT
   }, {
     sequelize,
-    modelName: 'Incomes',
+    modelName: 'Incomes'
   });
   return Incomes;
 };
